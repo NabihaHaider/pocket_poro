@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true">
+    <item android:drawable="@drawable/explosion_frame_1_vectorized" android:duration="150" />
+    <item android:drawable="@drawable/explosion_frame_2_vectorized" android:duration="150" />
+    <item android:drawable="@drawable/explosion_frame_3_vectorized" android:duration="150" />
+    <item android:drawable="@drawable/explosion_frame_4_vectorized" android:duration="150" />
+    <item android:drawable="@drawable/explosion_frame_5_vectorized" android:duration="150" />
+    <item android:drawable="@drawable/exploded_adult_1" android:duration="500" />
+</animation-list>
