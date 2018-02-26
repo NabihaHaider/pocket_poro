@@ -126,7 +126,7 @@ public class PoroActivity extends AppCompatActivity {
 
     // Array of frames/xml animations for BABY, TEEN, ADULT, BRAUM BABY, BRAUM TEEN, and BRAUM ADULT
     private int getImageId(int skin, int age, int stage) {
-         // stage = STAGE_SAD;  // TODO: for stage test purposes
+        // stage = STAGE_SAD;  // TODO: for stage test purposes
         if (imageArray == null) {
             imageArray = new int[3][3][5];
             imageArray[SKIN][AGE_BABY][STAGE_DEFAULT] = R.drawable.baby_poro;
@@ -173,37 +173,28 @@ public class PoroActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         long timeUtilsAge = TimeUtils.timeSinceOpened(this);
-
-        // Aging animations
-        if (timeUtilsAge < 1000 * 60 * 60 * 24 * 2) {
-            age = AGE_BABY;
-            setPoroAnimation(getImageId(skin, age, STAGE_DEFAULT));
-        } else if (timeUtilsAge < 1000 * 60 * 60 * 24 * 5) {
-            age = AGE_TEEN;
-            setPoroAnimation(getImageId(skin, age, STAGE_DEFAULT));
-        } else if (timeUtilsAge < 1000 * 60 * 60 * 24 * 9) {
-            age = AGE_ADULT;
-            setPoroAnimation(getImageId(skin, age, STAGE_DEFAULT));
-        } else {
-            age = AGE_ADULT;
-            setPoroAnimation(getImageId(skin, age, STAGE_DEAD));
-            showCustomDialog();
-        }
-
-         // age = AGE_ADULT; // TODO: for aging test purposes
-
         final long lastFed = TimeUtils.timeSinceLastFed(this);
 
-        // If Poro hasn't been fed for 2 days
-        if (lastFed > 1000 * 60 * 60 * 24 * 2 && TimeUtils.timeSinceOpened(this) > 1000 * 60 * 60 * 24 * 2) {
-            setPoroAnimation(getImageId(skin, age, STAGE_DEAD));
-            showCustomDialog();
-        }
         // If Poro hasn't been fed for 8+ hours, static image of sad Poro appears in mainView
-        else if (lastFed > 1000 * 60 * 60 * 8 && TimeUtils.timeSinceOpened(this) > 1000 * 60 * 60 * 8 ) {
-            setPoroAnimation(getImageId(skin, age, STAGE_SAD));
+        int stage = (lastFed > 1000 * 60 * 60 * 8 && TimeUtils.timeSinceOpened(this) > 1000 * 60 * 60 * 8) ? STAGE_SAD : STAGE_DEFAULT;
+        boolean lastFedTwoDaysAgo = lastFed > 1000 * 60 * 60 * 24 * 2 && TimeUtils.timeSinceOpened(this) > 1000 * 60 * 60 * 24 * 2;
+
+        // Aging animations
+        if (timeUtilsAge < 1000 * 60 * 60 * 24 * 3) {
+            age = AGE_BABY;
+        } else if (timeUtilsAge < 1000 * 60 * 60 * 24 * 6) {
+            age = AGE_TEEN;
+        } else {
+            age = AGE_ADULT;
         }
 
+        // If Poro hasn't been fed for 2+ hours or if age is 8 days, static image of dead Poro appears in mainView
+        if (lastFedTwoDaysAgo || timeUtilsAge >= 1000 * 60 * 60 * 24 * 8) {
+            setPoroAnimation(getImageId(skin, age, STAGE_DEAD));
+            showCustomDialog();
+        } else {
+            setPoroAnimation(getImageId(skin, age, stage));
+        }
     }
 }
 
